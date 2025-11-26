@@ -6,6 +6,9 @@ frontend:
   service:
     type: ClusterIP
     port: 80
+  env:
+    VITE_ENABLE_REMOTE_SYNC: "true"
+    VITE_REMOTE_SYNC_ENDPOINT: "http://localhost:5000"
 backend:
   image:
     repository: excalidraw-backend
@@ -13,4 +16,8 @@ backend:
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
-    port: 5000
+    port: 5001
+  env:
+    MONGODB_URI: "" # Pass this in via --set or secrets.yaml
+    PORT: "5001"
+    NODE_ENV: "development"

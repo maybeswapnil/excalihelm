@@ -1,0 +1,11 @@
+# Helm
+*.tgz
+*.lock
+.helmignore
+
+# General
+.DS_Store
+.idea/
+.vscode/
+*.swp
+secrets.yaml

@@ -21,3 +21,8 @@ spec:
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.frontend.service.port }}
+          env:
+            {{- range $key, $val := .Values.frontend.env }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
