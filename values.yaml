@@ -1,6 +1,6 @@
 frontend:
   image:
-    repository: excalidraw-frontend
+    repository: hellochemo/excalidraw-frontend
     tag: latest
     pullPolicy: IfNotPresent
   service:
@@ -11,7 +11,7 @@ frontend:
     VITE_REMOTE_SYNC_ENDPOINT: "http://localhost:5000"
 backend:
   image:
-    repository: excalidraw-backend
+    repository: hellochemo/excalidraw-backend
     tag: latest
     pullPolicy: IfNotPresent
   service:
