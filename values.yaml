@@ -11,10 +11,11 @@ frontend:
   image:
     repository: hellochemo/excalidraw-frontend
     tag: latest
-    pullPolicy: Always
+    pullPolicy: Never
   service:
     type: ClusterIP
     port: 80
+    nodePort: 30000
   env:
     VITE_ENABLE_REMOTE_SYNC: "true"
     VITE_REMOTE_SYNC_ENDPOINT: "http://localhost:5000"
@@ -22,10 +23,11 @@ backend:
   image:
     repository: hellochemo/excalidraw-backend
     tag: latest
-    pullPolicy: Always
+    pullPolicy: Never
   service:
     type: ClusterIP
     port: 5001
+    nodePort: 30001
   env:
     MONGODB_URI: "" # Pass this in via --set or secrets.yaml
     PORT: "5001"
