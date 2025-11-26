@@ -1,8 +1,17 @@
+imagePullSecrets:
+  - name: regcred
+
+dockerhub:
+  server: "https://index.docker.io/v1/"
+  username: ""
+  password: ""
+  email: ""
+
 frontend:
   image:
-    repository: docker.io/hellochemo/excalidraw-frontend
+    repository: hellochemo/excalidraw-frontend
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   service:
     type: ClusterIP
     port: 80
@@ -11,9 +20,9 @@ frontend:
     VITE_REMOTE_SYNC_ENDPOINT: "http://localhost:5000"
 backend:
   image:
-    repository: docker.io/hellochemo/excalidraw-backend
+    repository: hellochemo/excalidraw-backend
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   service:
     type: ClusterIP
     port: 5001
