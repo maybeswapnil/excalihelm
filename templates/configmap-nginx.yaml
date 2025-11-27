@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "excalidraw.fullname" . }}-nginx-config
+  labels:
+    {{- include "excalidraw.labels" . | nindent 4 }}
+data:
+  nginx.conf: |
+    events {
+      worker_connections 1024;
+    }
+
+    http {
+      upstream frontend {
+        server {{ include "excalidraw.fullname" . }}-frontend:{{ .Values.frontend.service.port }};
+      }
+
+      upstream backend {
+        server {{ include "excalidraw.fullname" . }}-backend:{{ .Values.backend.service.port }};
+      }
+
+      server {
+        listen 80;
+        
+        # Route /excalidraw/* to frontend (strip /excalidraw prefix)
+        location /excalidraw {
+          rewrite ^/excalidraw(/.*)$ $1 break;
+          rewrite ^/excalidraw$ / break;
+          proxy_pass http://frontend;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Route everything else to backend (including WebSocket)
+        location / {
+          proxy_pass http://backend;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          
+          # WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_read_timeout 86400;
+        }
+      }
+    }

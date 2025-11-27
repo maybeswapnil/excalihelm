@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "excalidraw.fullname" . }}-nginx
+  labels:
+    {{- include "excalidraw.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "excalidraw.name" . }}-nginx
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "excalidraw.name" . }}-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: {{ include "excalidraw.fullname" . }}-nginx-config
