@@ -1,3 +1,5 @@
+namespace: excalidraw
+
 imagePullSecrets:
   - name: regcred
 
